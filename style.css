@@ -1,0 +1,48 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+
+#game-container {
+    display: grid;
+    /* Adjust grid template for your board size, e.g., 5x5 */
+    grid-template-columns: repeat(5, 60px); 
+    gap: 5px;
+    margin: 20px auto;
+    width: fit-content;
+    border: 2px solid black;
+    padding: 10px;
+}
+
+.cell {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #aaa;
+    font-size: 1.2em;
+    cursor: pointer;
+    background-color: #f4f4f4;
+    transition: background-color 0.3s;
+}
+
+.player1 {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+}
+
+.player2 {
+    background-color: lightgray;
+    color: black;
+    font-weight: bold;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 15px;
+}
