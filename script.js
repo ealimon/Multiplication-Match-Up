@@ -9,34 +9,68 @@ let timeLeft = 60; // 60 seconds (1 minute)
 let currentFactor1 = 0;
 let currentFactor2 = 0;
 
-// Set of products (Adjusted products to be more varied for a solo game)
+// 1. GUARANTEED MATCHABLE PRODUCTS (Factors 2 through 12)
+// This list contains 40 unique and duplicate products, all achievable by multiplying factors 2-12.
 const baseProducts = [
-    34, 42, 48, 54, 70, 60, 98, 
-    64, 72, 80, 90, 108, 104, 136, 140,
-    100, 121, 132, 143, 140, 100, 150, 70,
-    144, 156, 156, 185, 192, 165, 176, 188,
-    169, 182, 195, 185, 221, 234, 237, 260
+    16, 18, 20, 21, 24, 25, 27, 28,
+    30, 32, 35, 36, 40, 42, 45, 48, 
+    49, 54, 56, 60, 63, 64, 66, 72, 
+    77, 81, 84, 88, 96, 99, 100, 108,
+    110, 120, 121, 132, 144, 100, 96, 88
 ];
 const allProducts = [...baseProducts]; // Create a mutable copy
 
 // --- Core Game Functions ---
 
-// 1. Initialize factors and start the game
+// 2. GUARANTEED FACTOR GENERATION
 function initializeFactors() {
-    currentFactor1 = Math.floor(Math.random() * 11) + 2; // 2 through 12
-    currentFactor2 = Math.floor(Math.random() * 11) + 2; // 2 through 12
-    document.getElementById('factor1').innerText = currentFactor1;
-    document.getElementById('factor2').innerText = currentFactor2;
-    updateMatchText(false);
-}
+    let productIsOnBoard = false;
+    let targetProduct = 0;
 
-// 2. Update the "Your Match" display
-function updateMatchText(isMatched = false, product = 0) {
-    const textElement = document.getElementById('match-text');
-    if (isMatched) {
-        textElement.innerHTML = `${currentFactor1} x ${currentFactor2} = ${product} <span class="star-icon">⭐</span>`;
+    // Get all products currently displayed on the board that are NOT matched
+    const unmatchedCells = Array.from(document.querySelectorAll('.cell:not(.matched)'));
+
+    // Check if the board is completely cleared
+    if (unmatchedCells.length === 0) {
+        clearInterval(timer);
+        alert(`Congratulations! You cleared the whole board! Final score: ${score}`);
+        return;
+    }
+
+    // Pick a random unmatched product from the board to guarantee a solution
+    const randomCell = unmatchedCells[Math.floor(Math.random() * unmatchedCells.length)];
+    targetProduct = parseInt(randomCell.dataset.product);
+
+    // Find a factor pair for the chosen product (simple approach)
+    // We only care about factors up to 12
+    for (let f1 = 2; f1 <= 12; f1++) {
+        if (targetProduct % f1 === 0) {
+            let f2 = targetProduct / f1;
+            if (f2 >= 2 && f2 <= 12) {
+                // Found a valid pair. Randomly assign them to factor 1 and 2.
+                if (Math.random() < 0.5) {
+                    currentFactor1 = f1;
+                    currentFactor2 = f2;
+                } else {
+                    currentFactor1 = f2;
+                    currentFactor2 = f1;
+                }
+                productIsOnBoard = true;
+                break; // Exit the loop once a pair is found
+            }
+        }
+    }
+
+    // This block runs if a valid factor pair (2-12) was found
+    if (productIsOnBoard) {
+        document.getElementById('factor1').innerText = currentFactor1;
+        document.getElementById('factor2').innerText = currentFactor2;
+        updateMatchText(false);
     } else {
-        textElement.innerText = `${currentFactor1} x ${currentFactor2} = ?`;
+        // Fallback: If no 2-12 factor pair was found (e.g., if we still included a number like 237),
+        // we call initializeFactors again until a viable product is chosen.
+        // NOTE: With the updated baseProducts list, this shouldn't happen.
+        initializeFactors();
     }
 }
 
@@ -53,12 +87,10 @@ function handleCellClick(event) {
 
     if (productClicked === requiredProduct) {
         // Correct Match!
-        
-        // Randomly choose between p1 (red) and p2 (green) for variety
         const colorClass = Math.random() < 0.5 ? 'p1' : 'p2';
         
-        cell.classList.add('matched', colorClass, 'highlight'); // Add highlight for visual effect
-        cell.onclick = null; // Disable further clicks on this cell
+        cell.classList.add('matched', colorClass, 'highlight');
+        cell.onclick = null;
 
         score++;
         document.getElementById('score').innerText = score;
@@ -71,7 +103,7 @@ function handleCellClick(event) {
         }, 500); 
 
     } else {
-        // Incorrect Match - brief flash of wrong color (using p3 for a temporary wrong flash)
+        // Incorrect Match - brief flash of wrong color (p3 class must be defined in CSS)
         cell.classList.add('p3'); 
         setTimeout(() => {
             cell.classList.remove('p3');
@@ -79,15 +111,24 @@ function handleCellClick(event) {
     }
 }
 
-// 4. Board Generation and Rendering
+// 4. Update the "Your Match" display (remains the same)
+function updateMatchText(isMatched = false, product = 0) {
+    const textElement = document.getElementById('match-text');
+    if (isMatched) {
+        textElement.innerHTML = `${currentFactor1} x ${currentFactor2} = ${product} <span class="star-icon">⭐</span>`;
+    } else {
+        textElement.innerText = `${currentFactor1} x ${currentFactor2} = ?`;
+    }
+}
+
+// 5. Board Generation and Rendering (remains the same)
 function initializeBoard() {
-    shuffle(allProducts); // Ensure board is randomized
-    gameBoard = []; // Reset the logic board
+    shuffle(allProducts); 
+    gameBoard = []; 
 
     const container = document.getElementById('game-container');
-    container.innerHTML = ''; // Clear existing board
+    container.innerHTML = ''; 
     
-    // Fill the 40 cells
     for (let i = 0; i < boardCols * boardRows; i++) {
         const product = allProducts[i % allProducts.length];
         
@@ -100,10 +141,11 @@ function initializeBoard() {
     }
 }
 
-// 5. Start the countdown timer
+// 6. Timer, Shuffle, and Reset functions (remain the same)
+
 function startTimer() {
-    clearInterval(timer); // Clear any existing timer
-    timeLeft = 60; // Reset time to 60 seconds
+    clearInterval(timer); 
+    timeLeft = 60; 
     document.getElementById('time-left').innerText = formatTime(timeLeft);
 
     timer = setInterval(() => {
@@ -113,19 +155,17 @@ function startTimer() {
         if (timeLeft <= 0) {
             clearInterval(timer);
             alert(`Time's up! Game Over. Your final score is: ${score}`);
-            document.querySelectorAll('.cell').forEach(c => c.onclick = null); // Disable board
+            document.querySelectorAll('.cell').forEach(c => c.onclick = null);
         }
     }, 1000);
 }
 
-// 6. Utility to format time (M:SS)
 function formatTime(seconds) {
     const min = Math.floor(seconds / 60);
     const sec = seconds % 60;
     return `${min}:${sec < 10 ? '0' : ''}${sec}`;
 }
 
-// 7. Fisher-Yates shuffle algorithm
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -133,15 +173,13 @@ function shuffle(array) {
     }
 }
 
-// 8. Main Reset Function
 function resetGame() {
     score = 0;
     document.getElementById('score').innerText = score;
     initializeBoard();
-    initializeFactors();
+    initializeFactors(); // Calls the new, guaranteed factor generator
     startTimer();
 }
-
 
 // Start the game when the page loads
 resetGame();
