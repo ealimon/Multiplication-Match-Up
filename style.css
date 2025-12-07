@@ -1,48 +1,149 @@
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin: 20px;
+:root {
+    --bg-color: #e0f7fa; /* Light blue background */
+    --window-color: #fff;
+    --orange: #ff9800;
+    --purple: #9c27b0;
+    --red-cell: #ef5350;
+    --green-cell: #66bb6a;
+    --unmatched-cell: #f4f4f4;
+    --border-color: #b0bec5;
 }
 
+body {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 20px;
+}
+
+header h1 {
+    color: #d32f2f;
+    margin-bottom: 5px;
+}
+
+/* Control Panel (Factors and Match Box) */
+#control-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin: 20px 0;
+}
+
+.factor-display {
+    display: flex;
+    gap: 15px;
+}
+
+.factor-bubble {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2em;
+    font-weight: bold;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+
+.orange-bg { background-color: var(--orange); }
+.purple-bg { background-color: var(--purple); }
+
+#match-box {
+    border: 2px dashed var(--border-color);
+    padding: 10px 20px;
+    font-size: 1.1em;
+    min-width: 180px;
+    background-color: var(--window-color);
+}
+
+#match-text {
+    font-weight: bold;
+    color: #4caf50;
+}
+
+/* Game Window Container */
+#game-window {
+    background-color: var(--window-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    width: fit-content;
+    margin: 0 auto 20px auto;
+    padding: 20px;
+    border: 3px solid #d32f2f; /* Red border for a 'window' look */
+}
+
+/* Game Board Grid */
 #game-container {
     display: grid;
-    /* Adjust grid template for your board size, e.g., 5x5 */
-    grid-template-columns: repeat(5, 60px); 
-    gap: 5px;
-    margin: 20px auto;
-    width: fit-content;
-    border: 2px solid black;
+    /* 8 columns for a larger board */
+    grid-template-columns: repeat(8, 70px); 
+    gap: 8px;
     padding: 10px;
 }
 
 .cell {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #aaa;
-    font-size: 1.2em;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
     cursor: pointer;
-    background-color: #f4f4f4;
-    transition: background-color 0.3s;
+    background-color: var(--unmatched-cell);
+    border: 1px solid #ccc;
+    transition: transform 0.1s, background-color 0.3s;
 }
 
-.player1 {
-    background-color: black;
+.cell:hover:not(.matched) {
+    transform: scale(1.05);
+    box-shadow: 0 0 5px var(--orange);
+}
+
+/* Matched States (Red/Green based on image) */
+.matched {
+    cursor: default;
     color: white;
-    font-weight: bold;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
 }
 
-.player2 {
-    background-color: lightgray;
-    color: black;
-    font-weight: bold;
+.matched.p1 { 
+    background-color: var(--red-cell); /* Player 1 (Red) */
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 1em;
+.matched.p2 { 
+    background-color: var(--green-cell); /* Player 2 (Green, but here just used for a different color) */
+}
+
+/* Stats and Button */
+#stats {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+#new-game-button {
+    padding: 12px 25px;
+    font-size: 1.1em;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
-    margin-top: 15px;
+    transition: background-color 0.2s;
+}
+
+#new-game-button:hover {
+    background-color: #0056b3;
+}
+
+/* Star Icon for the image representation */
+.star-icon::after {
+    content: " ⭐";
+    font-size: 0.8em;
 }
