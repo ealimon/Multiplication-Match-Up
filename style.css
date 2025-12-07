@@ -3,11 +3,11 @@
     --bg-color: #c9e6f3; /* Lighter blue background */
     --window-color: #fff;
     --header-color: #d32f2f; /* Red title */
-    --orange: #ff7043; /* Bright Orange */
-    --purple: #ab47bc; /* Bright Purple */
+    --orange: #ff7043; /* Bright Orange for Factor 1 */
+    --purple: #ab47bc; /* Bright Purple for Factor 2 */
     --red-cell: #ef5350; /* Red for matched cells (p1) */
     --green-cell: #66bb6a; /* Green for matched cells (p2) */
-    --yellow-cell: #ffee58; /* Yellow for specific highlighting/bonus (p3) */
+    --yellow-cell: #fdd835; /* Bright Yellow for flash/highlight/p3 */
     --unmatched-cell: #f4f4f4;
     --border-color: #90a4ae;
 }
@@ -30,7 +30,7 @@ header h1 {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* Control Panel (Factors and Match Box) */
+/* --- Control Panel (Factors and Match Box) --- */
 #control-panel {
     display: flex;
     justify-content: center;
@@ -57,7 +57,7 @@ header h1 {
     font-size: 1.8em;
     font-weight: bold;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    border: 3px solid white; /* White border for contrast */
+    border: 3px solid white; 
 }
 
 .orange-bg { background-color: var(--orange); }
@@ -75,10 +75,10 @@ header h1 {
 
 #match-text {
     font-weight: bold;
-    color: #388e3c; /* Darker green for text */
+    color: #388e3c;
 }
 
-/* Game Window Container - The main "app" look */
+/* --- Game Window Container (The main "app" look) --- */
 #game-window {
     background-color: var(--window-color);
     border-radius: 15px;
@@ -96,7 +96,7 @@ header h1 {
     margin-bottom: 15px;
 }
 
-/* Game Board Grid */
+/* --- Game Board Grid and Cells --- */
 #game-container {
     display: grid;
     grid-template-columns: repeat(8, 70px); 
@@ -125,24 +125,35 @@ header h1 {
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 
-/* Matched States */
+/* --- Matched and Feedback States --- */
 .matched {
     cursor: default;
     color: white;
     box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
 }
 
-.matched.p1 { background-color: var(--red-cell); } /* Matched by player/correct */
-.matched.p2 { background-color: var(--green-cell); } /* Matched by player/correct */
+.matched.p1 { 
+    background-color: var(--red-cell); /* Correct match color 1 (Red) */
+}
+
+.matched.p2 { 
+    background-color: var(--green-cell); /* Correct match color 2 (Green) */
+}
+
+.cell.p3 {
+    background-color: var(--yellow-cell); /* Incorrect answer flash (Yellow) */
+    color: black;
+    transform: scale(0.95);
+}
 
 .matched.highlight {
-    background-color: var(--yellow-cell); /* For the highlighted cell in the image */
+    background-color: var(--yellow-cell); 
     color: black;
     border: 3px solid gold;
     transform: scale(1.05);
 }
 
-/* Stats and Button */
+/* --- Stats and Button --- */
 #stats {
     font-size: 1.2em;
     font-weight: bold;
@@ -153,7 +164,7 @@ header h1 {
 #new-game-button {
     padding: 10px 20px;
     font-size: 1em;
-    background-color: #42a5f5; /* Blue button */
+    background-color: #42a5f5;
     color: white;
     border: none;
     border-radius: 8px;
@@ -166,7 +177,6 @@ header h1 {
     background-color: #2196f3;
 }
 
-/* Star Icon for the image representation */
 .star-icon {
     display: inline-block;
     color: gold;
