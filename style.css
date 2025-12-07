@@ -1,12 +1,15 @@
 :root {
-    --bg-color: #e0f7fa; /* Light blue background */
+    /* Updated Color Palette to Match Image */
+    --bg-color: #c9e6f3; /* Lighter blue background */
     --window-color: #fff;
-    --orange: #ff9800;
-    --purple: #9c27b0;
-    --red-cell: #ef5350;
-    --green-cell: #66bb6a;
+    --header-color: #d32f2f; /* Red title */
+    --orange: #ff7043; /* Bright Orange */
+    --purple: #ab47bc; /* Bright Purple */
+    --red-cell: #ef5350; /* Red for matched cells (p1) */
+    --green-cell: #66bb6a; /* Green for matched cells (p2) */
+    --yellow-cell: #ffee58; /* Yellow for specific highlighting/bonus (p3) */
     --unmatched-cell: #f4f4f4;
-    --border-color: #b0bec5;
+    --border-color: #90a4ae;
 }
 
 body {
@@ -14,12 +17,17 @@ body {
     text-align: center;
     background-color: var(--bg-color);
     margin: 0;
-    padding: 20px;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 header h1 {
-    color: #d32f2f;
+    color: var(--header-color);
+    font-size: 2.5em;
     margin-bottom: 5px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Control Panel (Factors and Match Box) */
@@ -29,6 +37,8 @@ header h1 {
     align-items: center;
     gap: 30px;
     margin: 20px 0;
+    width: 100%;
+    max-width: 650px;
 }
 
 .factor-display {
@@ -37,16 +47,17 @@ header h1 {
 }
 
 .factor-bubble {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 2em;
+    font-size: 1.8em;
     font-weight: bold;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border: 3px solid white; /* White border for contrast */
 }
 
 .orange-bg { background-color: var(--orange); }
@@ -56,32 +67,40 @@ header h1 {
     border: 2px dashed var(--border-color);
     padding: 10px 20px;
     font-size: 1.1em;
-    min-width: 180px;
+    min-width: 250px;
     background-color: var(--window-color);
+    border-radius: 5px;
+    line-height: 1.5;
 }
 
 #match-text {
     font-weight: bold;
-    color: #4caf50;
+    color: #388e3c; /* Darker green for text */
 }
 
-/* Game Window Container */
+/* Game Window Container - The main "app" look */
 #game-window {
     background-color: var(--window-color);
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     width: fit-content;
-    margin: 0 auto 20px auto;
+    margin: 20px auto;
     padding: 20px;
-    border: 3px solid #d32f2f; /* Red border for a 'window' look */
+    border: 8px solid var(--header-color); 
+    max-width: 650px;
+}
+
+#game-window h3 {
+    color: var(--header-color);
+    margin-top: 0;
+    margin-bottom: 15px;
 }
 
 /* Game Board Grid */
 #game-container {
     display: grid;
-    /* 8 columns for a larger board */
     grid-template-columns: repeat(8, 70px); 
-    gap: 8px;
+    gap: 5px;
     padding: 10px;
 }
 
@@ -97,53 +116,61 @@ header h1 {
     cursor: pointer;
     background-color: var(--unmatched-cell);
     border: 1px solid #ccc;
-    transition: transform 0.1s, background-color 0.3s;
+    transition: background-color 0.2s, transform 0.1s;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.1);
 }
 
 .cell:hover:not(.matched) {
-    transform: scale(1.05);
-    box-shadow: 0 0 5px var(--orange);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 
-/* Matched States (Red/Green based on image) */
+/* Matched States */
 .matched {
     cursor: default;
     color: white;
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
 }
 
-.matched.p1 { 
-    background-color: var(--red-cell); /* Player 1 (Red) */
-}
+.matched.p1 { background-color: var(--red-cell); } /* Matched by player/correct */
+.matched.p2 { background-color: var(--green-cell); } /* Matched by player/correct */
 
-.matched.p2 { 
-    background-color: var(--green-cell); /* Player 2 (Green, but here just used for a different color) */
+.matched.highlight {
+    background-color: var(--yellow-cell); /* For the highlighted cell in the image */
+    color: black;
+    border: 3px solid gold;
+    transform: scale(1.05);
 }
 
 /* Stats and Button */
 #stats {
     font-size: 1.2em;
     font-weight: bold;
+    margin-top: 15px;
     margin-bottom: 15px;
 }
 
 #new-game-button {
-    padding: 12px 25px;
-    font-size: 1.1em;
-    background-color: #007bff;
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #42a5f5; /* Blue button */
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.2s;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.2);
 }
 
 #new-game-button:hover {
-    background-color: #0056b3;
+    background-color: #2196f3;
 }
 
 /* Star Icon for the image representation */
-.star-icon::after {
-    content: " ⭐";
-    font-size: 0.8em;
+.star-icon {
+    display: inline-block;
+    color: gold;
+    font-size: 1.2em;
+    margin-left: 5px;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 }
