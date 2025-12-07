@@ -9,9 +9,9 @@ let timeLeft = 60; // 60 seconds (1 minute)
 let currentFactor1 = 0;
 let currentFactor2 = 0;
 
-// Set of products (e.g., facts up to 12x12, and some larger)
+// Set of products (Adjusted products to be more varied for a solo game)
 const baseProducts = [
-    36, 42, 48, 54, 70, 60, 98, 
+    34, 42, 48, 54, 70, 60, 98, 
     64, 72, 80, 90, 108, 104, 136, 140,
     100, 121, 132, 143, 140, 100, 150, 70,
     144, 156, 156, 185, 192, 165, 176, 188,
@@ -27,14 +27,14 @@ function initializeFactors() {
     currentFactor2 = Math.floor(Math.random() * 11) + 2; // 2 through 12
     document.getElementById('factor1').innerText = currentFactor1;
     document.getElementById('factor2').innerText = currentFactor2;
-    updateMatchText();
+    updateMatchText(false);
 }
 
 // 2. Update the "Your Match" display
 function updateMatchText(isMatched = false, product = 0) {
     const textElement = document.getElementById('match-text');
     if (isMatched) {
-        textElement.innerHTML = `${currentFactor1} x ${currentFactor2} = ${product} <span class="star-icon"></span>`;
+        textElement.innerHTML = `${currentFactor1} x ${currentFactor2} = ${product} <span class="star-icon">⭐</span>`;
     } else {
         textElement.innerText = `${currentFactor1} x ${currentFactor2} = ?`;
     }
@@ -53,21 +53,28 @@ function handleCellClick(event) {
 
     if (productClicked === requiredProduct) {
         // Correct Match!
-        cell.classList.add('matched', 'p1'); // Apply the matched styling
-        cell.classList.remove('p2'); // Ensure clean class state
+        
+        // Randomly choose between p1 (red) and p2 (green) for variety
+        const colorClass = Math.random() < 0.5 ? 'p1' : 'p2';
+        
+        cell.classList.add('matched', colorClass, 'highlight'); // Add highlight for visual effect
         cell.onclick = null; // Disable further clicks on this cell
 
         score++;
         document.getElementById('score').innerText = score;
         updateMatchText(true, productClicked);
 
-        // Generate new factors for the next turn
-        setTimeout(initializeFactors, 500); // Small delay for visual feedback
-    } else {
-        // Incorrect Match - brief flash of wrong color
-        cell.classList.add('p2'); 
+        // Remove the highlight after a small delay and generate new factors
         setTimeout(() => {
-            cell.classList.remove('p2');
+            cell.classList.remove('highlight');
+            initializeFactors(); 
+        }, 500); 
+
+    } else {
+        // Incorrect Match - brief flash of wrong color (using p3 for a temporary wrong flash)
+        cell.classList.add('p3'); 
+        setTimeout(() => {
+            cell.classList.remove('p3');
         }, 200);
     }
 }
@@ -96,7 +103,7 @@ function initializeBoard() {
 // 5. Start the countdown timer
 function startTimer() {
     clearInterval(timer); // Clear any existing timer
-    timeLeft = 60; // Reset time
+    timeLeft = 60; // Reset time to 60 seconds
     document.getElementById('time-left').innerText = formatTime(timeLeft);
 
     timer = setInterval(() => {
