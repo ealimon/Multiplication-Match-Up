@@ -1,13 +1,13 @@
 :root {
-    /* Updated Color Palette to Match Image */
-    --bg-color: #c9e6f3; /* Lighter blue background */
+    /* Updated Color Palette */
+    --bg-color: #c9e6f3;
     --window-color: #fff;
-    --header-color: #d32f2f; /* Red title */
-    --orange: #ff7043; /* Bright Orange for Factor 1 */
-    --purple: #ab47bc; /* Bright Purple for Factor 2 */
-    --red-cell: #ef5350; /* Red for matched cells (p1) */
-    --green-cell: #66bb6a; /* Green for matched cells (p2) */
-    --yellow-cell: #fdd835; /* Bright Yellow for flash/highlight/p3 */
+    --header-color: #d32f2f;
+    --orange: #ff7043;
+    --purple: #ab47bc;
+    --red-cell: #ef5350;
+    --green-cell: #66bb6a;
+    --yellow-cell: #fdd835;
     --unmatched-cell: #f4f4f4;
     --border-color: #90a4ae;
 }
@@ -83,11 +83,12 @@ header h1 {
     background-color: var(--window-color);
     border-radius: 15px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    /* REDUCED MAX-WIDTH FOR SMALLER GRID */
     width: fit-content;
     margin: 20px auto;
     padding: 20px;
     border: 8px solid var(--header-color); 
-    max-width: 650px;
+    max-width: 550px; /* Adjusted to fit 6 columns comfortably */
 }
 
 #game-window h3 {
@@ -99,7 +100,8 @@ header h1 {
 /* --- Game Board Grid and Cells --- */
 #game-container {
     display: grid;
-    grid-template-columns: repeat(8, 70px); 
+    /* CHANGED FROM 8 TO 6 COLUMNS */
+    grid-template-columns: repeat(6, 70px); 
     gap: 5px;
     padding: 10px;
 }
@@ -133,15 +135,15 @@ header h1 {
 }
 
 .matched.p1 { 
-    background-color: var(--red-cell); /* Correct match color 1 (Red) */
+    background-color: var(--red-cell); 
 }
 
 .matched.p2 { 
-    background-color: var(--green-cell); /* Correct match color 2 (Green) */
+    background-color: var(--green-cell);
 }
 
 .cell.p3 {
-    background-color: var(--yellow-cell); /* Incorrect answer flash (Yellow) */
+    background-color: var(--yellow-cell);
     color: black;
     transform: scale(0.95);
 }
